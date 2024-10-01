@@ -1,0 +1,314 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    
+<script>
+class Vehiculo {
+    id=0;
+    modelo="";
+    anoFab=0;
+    velMax=0;
+    constructor(id, modelo, anoFab, velMax) {
+        this.id = id;
+        this.modelo = modelo;
+        this.anoFab = anoFab;
+        this.velMax = velMax;
+    }
+
+    toString() {
+        return `ID: ${this.id}, Modelo: ${this.modelo}, Año de Fabricación: ${this.anoFab}, Velocidad Máxima: ${this.velMax}`;
+    }
+}
+
+class Aereo extends Vehiculo {
+    altMax=0;
+    autonomia=0;
+    constructor(id, modelo, anoFab, velMax, altMax, autonomia) {
+        super(id, modelo, anoFab, velMax);
+        
+        this.altMax = altMax;
+        this.autonomia = autonomia;
+    }
+
+    toString() {
+        return super.toString() + `, Altitud Máxima: ${this.altMax}, Autonomía: ${this.autonomia}`;
+    }
+}
+
+
+class Terrestre extends Vehiculo {
+    cantPue=-1;
+    cantRue=0;
+    constructor(id, modelo, anoFab, velMax, cantPue, cantRue) {
+        super(id, modelo, anoFab, velMax);
+        this.cantPue = cantPue;
+        this.cantRue = cantRue;
+    }
+
+    toString() {
+        return super.toString() + `, Cantidad de Puertas: ${this.cantPue}, Cantidad de Ruedas: ${this.cantRue}`;
+    }
+}
+
+var vehiculosDatos = JSON.parse('[{"id":14, "modelo":"Ferrari F100", "anoFab":1998, "velMax":400, "cantidadPuertas":2, "cantRue":4},{"id":51, "modelo":"Dodge Viper", "anoFab":1991, "velMax":266, "cantPue":2, "cantRue":4},{"id":67, "modelo":"Boeing CH-47 Chinook", "anoFab":1962, "velMax":302, "altMax":6, "autonomia":1200},{"id":666, "modelo":"Aprilia RSV 1000 R", "anoFab":2004, "velMax":280, "cantPue":0, "cantRue":2},{"id":872, "modelo":"Boeing 747-400", "anoFab":1989, "velMax":988, "altMax":13, "autonomia":13450},{"id":742, "modelo":"Cessna CH-1 SkyhookR", "anoFab":1953, "velMax":174, "altMax":3, "autonomia":870}]');
+
+
+var arrayVehiculos = vehiculosDatos.map(vehiculo => {
+    if (vehiculo.autonomia !== undefined && vehiculo.altMax !== undefined ) {
+        return new Aereo(vehiculo.id, vehiculo.modelo, vehiculo.anoFab, vehiculo.velMax, vehiculo.altMax, vehiculo.autonomia);
+    } else {
+        return new Terrestre(vehiculo.id, vehiculo.modelo, vehiculo.anoFab, vehiculo.velMax, vehiculo.cantPue, vehiculo.cantRue);
+    }    
+});
+
+arrayVehiculos.forEach(vehiculo => {
+    console.log(vehiculo.toString());
+});
+ 
+function cargarTabla() {
+            
+    const tabla = document.querySelector('#data-table tbody');
+
+            
+            tabla.innerHTML = '';
+            arrayVehiculos.forEach(vehiculo => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${vehiculo.id}</td>
+                    <td>${vehiculo.modelo}</td>
+                    <td>${vehiculo.anoFab}</td>
+                    <td>${vehiculo.velMax} km/h</td>
+                    <td>${vehiculo.altMax}</td>
+                    <td>${vehiculo.autonomia} m</td>
+                    <td>${vehiculo.cantPue} km</td>
+                    <td>${vehiculo.cantRue}</td>
+                `;
+                tabla.appendChild(row);
+            });
+        }
+
+        function filtrarTablaCheck() {
+            const check = document.querySelectorAll('input[type="checkbox"]');
+            const tabla = document.getElementById('data-table');
+            const rows = tabla.getElementsByTagName('tr');
+            const cabecera = rows[0].getElementsByTagName('th');
+
+            const columnas = Array.from(check).map
+            ((checkbox, index) => checkbox.checked ? index : -1).filter(index => index !== -1);
+
+            for (let i = 1; i < rows.length; i++) { 
+                const celda = rows[i].getElementsByTagName('td');
+                for (let j = 0; j < celda.length; j++) {
+                    celda[j].style.display = columnas.includes(j) ? '' : 'none';
+                }
+            }
+            
+            for (let j = 0; j < cabecera.length; j++) {
+                cabecera[j].style.display = columnas.includes(j) ? '' : 'none';
+            }
+        }
+
+        function filtrarTablaSelect() {
+            const filtro = document.getElementById('filter').value;
+            const tabla = document.getElementById('data-table');
+            const rows = tabla.getElementsByTagName('tr');   
+            // Iterar sobre las filas y ocultar/mostrar según el tipo seleccionado
+            for (let i = 1; i < rows.length; i++) { // Empieza desde 1 para evitar la cabecera
+                const celda = rows[i].getElementsByTagName('td');
+                const tipo = celda[4].textContent.toLowerCase(); // Obtener el tipo de la fila
+
+                // Mostrar la fila si el tipo coincide con el filtro o si se selecciona "todos"
+                rows[i].style.display = (filtro === 'todos' || tipo === filtro) ? '' : 'none';
+            }
+        }
+
+
+
+ function agregar() {
+            const id = document.getElementById('id').value;
+            const modelo = document.getElementById('modelo').value;
+            const anio = document.getElementById('anio').value;
+            const velocidad = document.getElementById('velocidad').value;
+            const altura = document.getElementById('altura').value;
+            const autonomia = document.getElementById('autonomia').value;
+            const puertas = document.getElementById('puertas').value;
+            const ruedas = document.getElementById('ruedas').value;
+
+            const tableBody = document.querySelector('#data-table tbody');
+
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${id}</td>
+                <td>${modelo}</td>
+                <td>${anio}</td>
+                <td>${velocidad} km/h</td>
+                <td>${altura} m</td>
+                <td>${autonomia} km</td>
+                <td>${puertas}</td>
+                <td>${ruedas}</td>
+            `;
+            tableBody.appendChild(row);
+            document.getElementById('data-form').reset();
+            const form = document.getElementById('formAbm');
+            form.style.display = "none";
+        }
+
+    function editar() {
+            const id = document.getElementById('id').value;
+            const modelo = document.getElementById('modelo').value;
+            const anio = document.getElementById('anio').value;
+            const velocidad = document.getElementById('velocidad').value;
+            const altura = document.getElementById('altura').value;
+            const autonomia = document.getElementById('autonomia').value;
+            const puertas = document.getElementById('puertas').value;
+            const ruedas = document.getElementById('ruedas').value;
+
+            const tabla = document.querySelector('#data-table tbody');
+
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${id}</td>
+                <td>${modelo}</td>
+                <td>${anio}</td>
+                <td>${velocidad} km/h</td>
+                <td>${altura} m</td>
+                <td>${autonomia} km</td>
+                <td>${puertas}</td>
+                <td>${ruedas}</td>
+            `;
+            tabla.appendChild(row);
+            document.getElementById('data-form').reset();
+            const form = document.getElementById('formAbm');
+            form.style.display = "none";
+        }
+
+    function mostrarForm() {
+        const form = document.getElementById('formAbm');
+        if (form.style.display === "none" || form.style.display === "") {
+            form.style.display = "block";
+        }
+        
+        }
+        window.onload = cargarTabla;
+</script>
+<div class="form-container" id="formDatos">
+
+<h1 class="tituloDatos" >Form Datos</h1>
+
+<form>
+    <div>
+        Filtrar por:
+        <select id="filter" onchange="filtrarTablaSelect()">
+            <option value="Todos">Todos</option>
+            <option value="Terrestre">Terrestre</option>
+            <option value="Aereo">Aereo</option>
+        </select>
+    </div>
+
+    <div>
+        <label><input type="checkbox" checked onchange="filtrarTablaCheck()"> id</label>
+        <label><input type="checkbox" checked onchange="filtrarTablaCheck()" > modelo</label>
+        <label><input type="checkbox" checked onchange="filtrarTablaCheck()"> año fab</label>
+        <label><input type="checkbox" checked onchange="filtrarTablaCheck()"> vel max</label>
+        <label><input type="checkbox" checked onchange="filtrarTablaCheck()"> alt max</label>
+        <label><input type="checkbox" checked onchange="filtrarTablaCheck()"> autonomia</label>
+        <label><input type="checkbox" checked onchange="filtrarTablaCheck()"> cant pue</label>
+        <label><input type="checkbox" checked onchange="filtrarTablaCheck()"> cant rue</label>
+    </div>
+
+    <div>
+        Promedio Velocidad Maxima: <input type="text" id="velocidadMax"> 
+        <button type="button" onclick="calcularVelocidad()">Calcular</button>
+    </div>
+
+    <table id="data-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Modelo</th>
+                <th>Año de Fabricación</th>
+                <th>Velocidad Máxima</th>
+                <th>Altura Máxima</th>
+                <th>Autonomía</th>
+                <th>Cantidad Puertas</th>
+                <th>Cantidad Ruedas</th>
+                
+            </tr>    
+        </thead>
+        <tbody>
+            <tr>
+                <td>--</td>
+                <td>--</td>
+                <td>--</td>
+                <td>--</td>
+                <td>--</td>
+                <td>--</td>
+                <td>--</td>
+                <td>--</td>
+            </tr>
+        </tbody>    
+    </table>
+
+    <div>
+        <button type="button" onclick="mostrarForm()">Agregar</button>
+    </div>
+</form>
+</div>
+
+
+<div class="form-container" id="formAbm">
+
+<h1>Formulario ABM</h1>
+
+<form id="data-form">
+    <div>
+        <input type="text" id="id" placeholder="ID" required>
+    </div>
+    <div>
+        <input type="text" id="modelo" placeholder="Modelo" required>
+    </div>
+    <div>
+        <input type="text" id="anio" placeholder="Año de Fabricación" required>
+    </div>
+    <div>
+        <input type="text" id="velocidad" placeholder="Velocidad Máxima" required>
+    </div>
+    <div>
+        <select id="tipo" required>
+            <option value="">Seleccione Tipo</option>
+            <option value="Aéreo">Aéreo</option>
+            <option value="Terrestre">Terrestre</option>
+        </select>
+    </div>
+    <div>
+        <input type="text" id="altura" placeholder="Altura Máxima">
+    </div>
+    <div>
+        <input type="text" id="autonomia" placeholder="Autonomía">
+    </div>
+    <div>
+        <input type="text" id="puertas" placeholder="Cantidad Puertas">
+    </div>
+    <div>
+        <input type="text" id="ruedas" placeholder="Cantidad Ruedas">
+    </div>
+    <div>
+        <button type="button" onclick="agregar()">Agregar</button>
+        <button type="button" onclick="editar()">Modificar</button>
+        <button type="button" onclick="eliminar()">Eliminar</button>
+        <button type="button" onclick="cancelar()">Cancelar</button>
+    </div>
+</form>
+
+</div>
+
+
+
+
+</body>
+</html>

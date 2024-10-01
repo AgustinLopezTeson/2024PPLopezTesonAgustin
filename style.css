@@ -1,0 +1,44 @@
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+th, td {
+    border: 1px solid #333;
+    padding: 5px; /* Menos espacio en las celdas */
+    text-align: center;
+}
+th {
+    background-color: #f2f2f2;
+}
+button {
+    border: 3px solid #333; /* Borde más grueso */
+    background-color: gray;
+    color: white;
+    padding: 5px 8px; /* Menos padding */
+    cursor: pointer;
+    outline: none; /* Sin borde al hacer clic */
+}
+button:hover {
+    background-color: blue;
+}
+
+.form-container {
+    border: 2px solid black;
+    padding: 0px;
+    border-radius: 5px; 
+
+}
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+}
+
+.tituloDatos
+{
+    margin: 0px;
+}
+
+#formAbm{
+    display: none;
+}
