@@ -4,19 +4,19 @@ table {
 }
 th, td {
     border: 1px solid #333;
-    padding: 5px; /* Menos espacio en las celdas */
+    padding: 5px; 
     text-align: center;
 }
 th {
     background-color: #f2f2f2;
 }
 button {
-    border: 3px solid #333; /* Borde más grueso */
+    border: 3px solid #333; 
     background-color: gray;
     color: white;
-    padding: 5px 8px; /* Menos padding */
+    padding: 5px 8px; 
     cursor: pointer;
-    outline: none; /* Sin borde al hacer clic */
+    outline: none; 
 }
 button:hover {
     background-color: blue;
