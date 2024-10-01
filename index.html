@@ -83,9 +83,10 @@ function cargarTabla() {
                     <td>${vehiculo.modelo}</td>
                     <td>${vehiculo.anoFab}</td>
                     <td>${vehiculo.velMax} km/h</td>
+                    <td>${vehiculo.constructor.name}</td>
                     <td>${vehiculo.altMax}</td>
-                    <td>${vehiculo.autonomia} m</td>
-                    <td>${vehiculo.cantPue} km</td>
+                    <td>${vehiculo.autonomia} km</td>
+                    <td>${vehiculo.cantPue} </td>
                     <td>${vehiculo.cantRue}</td>
                 `;
                 tabla.appendChild(row);
@@ -117,12 +118,9 @@ function cargarTabla() {
             const filtro = document.getElementById('filter').value;
             const tabla = document.getElementById('data-table');
             const rows = tabla.getElementsByTagName('tr');   
-            // Iterar sobre las filas y ocultar/mostrar según el tipo seleccionado
-            for (let i = 1; i < rows.length; i++) { // Empieza desde 1 para evitar la cabecera
+            for (let i = 1; i < rows.length; i++) { 
                 const celda = rows[i].getElementsByTagName('td');
-                const tipo = celda[4].textContent.toLowerCase(); // Obtener el tipo de la fila
-
-                // Mostrar la fila si el tipo coincide con el filtro o si se selecciona "todos"
+                const tipo = celda[4].textContent.toLowerCase(); 
                 rows[i].style.display = (filtro === 'todos' || tipo === filtro) ? '' : 'none';
             }
         }
@@ -134,6 +132,7 @@ function cargarTabla() {
             const modelo = document.getElementById('modelo').value;
             const anio = document.getElementById('anio').value;
             const velocidad = document.getElementById('velocidad').value;
+            const tipo = document.getElementById('tipo').value;
             const altura = document.getElementById('altura').value;
             const autonomia = document.getElementById('autonomia').value;
             const puertas = document.getElementById('puertas').value;
@@ -147,6 +146,7 @@ function cargarTabla() {
                 <td>${modelo}</td>
                 <td>${anio}</td>
                 <td>${velocidad} km/h</td>
+                <td>${tipo}</td>
                 <td>${altura} m</td>
                 <td>${autonomia} km</td>
                 <td>${puertas}</td>
@@ -163,6 +163,7 @@ function cargarTabla() {
             const modelo = document.getElementById('modelo').value;
             const anio = document.getElementById('anio').value;
             const velocidad = document.getElementById('velocidad').value;
+            const tipo = document.getElementById('tipo').value;
             const altura = document.getElementById('altura').value;
             const autonomia = document.getElementById('autonomia').value;
             const puertas = document.getElementById('puertas').value;
@@ -176,6 +177,7 @@ function cargarTabla() {
                 <td>${modelo}</td>
                 <td>${anio}</td>
                 <td>${velocidad} km/h</td>
+                <td>${tipo}</td>
                 <td>${altura} m</td>
                 <td>${autonomia} km</td>
                 <td>${puertas}</td>
@@ -204,9 +206,9 @@ function cargarTabla() {
     <div>
         Filtrar por:
         <select id="filter" onchange="filtrarTablaSelect()">
-            <option value="Todos">Todos</option>
-            <option value="Terrestre">Terrestre</option>
-            <option value="Aereo">Aereo</option>
+            <option value="todos">Todos</option>
+            <option value="terrestre">Terrestre</option>
+            <option value="aereo">Aereo</option>
         </select>
     </div>
 
@@ -233,6 +235,7 @@ function cargarTabla() {
                 <th>Modelo</th>
                 <th>Año de Fabricación</th>
                 <th>Velocidad Máxima</th>
+                <th>Tipo</th>
                 <th>Altura Máxima</th>
                 <th>Autonomía</th>
                 <th>Cantidad Puertas</th>
